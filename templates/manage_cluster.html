@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">EKS Kubernentes Manage</h1>  
+      <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+       <!-- <i id="quick-create-spinner" class="fa fa-spinner fa-spin" style="display:none"></i> -->
+        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-12">
+              <span id="message-alert"></span>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for cluster in context.clusters %} 
+                  <tr>
+                    <th scope="row">{{cluster.id}}</th>
+                    <td>{{cluster.name}}</td>
+                    <td>{{cluster.type}}</td>
+                    <td>{{cluster.creation_time_from_now()}}</td>
+                    <td>{% if cluster.status == 'Running'%}<a href="" ic-post-to='/destroy_cluster/{{cluster.id}}'  ic-indicator="#spinner" ic-target='#message-alert' class="btn btn-danger">Destroy</a>{% else %}{{cluster.status}}{%endif%}
+                    {% if cluster.status == 'Running'%}<a href="" ic-post-to='/refresh_config/{{cluster.id}}'  ic-indicator="#spinner" ic-target='#message-alert' class="btn btn-danger">Refresh Config</a>{% else %}{{cluster.status}}{%endif%}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

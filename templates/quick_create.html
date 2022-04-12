@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">EKS Kubernentes Quick Create</h1> 
+      <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+       <!-- <i id="quick-create-spinner" class="fa fa-spinner fa-spin" style="display:none"></i> -->
+        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-6">
+              <span id="message-alert"></span>
+              <form ic-post-to="/quick_create" ic-indicator="#spinner" ic-target='#message-alert'>
+                <div class="form-group row">
+                  <label class="col-6">Quick Create Experimental EKS Cluster</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="quick_create_check" id="quick_create_check_0" type="checkbox" checked="checked" disabled readonly class="custom-control-input" value="quick_create_cluster" required="required" aria-describedby="quick_create_checkHelpBlock"> 
+                      <label for="quick_create_check_0" class="custom-control-label"></label>
+                    </div> 
+                    <span id="quick_create_checkHelpBlock" class="form-text text-muted">Creates 2 m5.large nodes Cluster for experimental purposes</span>
+                    <div class="alert alert-secondary" role="alert">
+                     <strong> m5.large</strong> <br>vCPU: 2 <br>	RAM: 8GiB<br>	Storage: EBS-Only	<br>Bandwidth: Up to 10GiB	<br>EBS Bandwidth: Up to 4,750
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="form-group row">
+                  <label class="col-6">Destroy Experimental Cluster</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="destroy_cluster" id="destroy_cluster_0" type="checkbox" class="custom-control-input" value="destroy_cluster" checked="checked"> 
+                      <label for="destroy_cluster_0" class="custom-control-label"></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="destroy_in_min" class="col-6 col-form-label">Destroy Experimental Cluster in</label> 
+                  <div class="col-6">
+                    <div class="input-group">
+                      <input id="destroy_in_min" name="destroy_in_min" value="60" placeholder="60" type="text" aria-describedby="destroy_in_minHelpBlock" class="form-control"> 
+                      <div class="input-group-append">
+                        <div class="input-group-text">mins</div>
+                      </div>
+                    </div> 
+                    <span id="destroy_in_minHelpBlock" class="form-text text-muted">Cluster will be destroyed after this time</span>
+                  </div>
+                </div>  -->
+                <div class="form-group row">
+                  <div class="offset-6 col-6">
+                    <button name="submit" type="submit" class="btn btn-primary float-right">Create</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

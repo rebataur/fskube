@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">EKS Kubernentes Quick Create</h1> 
+      <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+     
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-7">
+            
+              <form method='GET' action='/menu/framework/{{context.submenu}}'>
+                <div class="form-group">
+                  <label for="eks_cluster">EKS Cluster</label> 
+                  <div>
+                    <select onchange="this.form.submit()" id="eks_cluster" name="eks_cluster" class="custom-select" aria-describedby="eks_clusterHelpBlock" required="required">
+                      <!-- <option value="1">ONE</option>
+                      <option value="2">TWO</option> -->
+                      <option></option>
+                      {% for cluster in context.clusters %}
+                        {% if cluster.status  %}
+                      <option value="{{cluster.id}}">{{cluster.name}}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select> 
+                    <small id="eks_clusterHelpBlock" class="form-text text-muted">Select one of your existing EKS Cluster to apply changes</small>
+                  </div>
+                </div> 
+               
+              </form>
+      
+              <div id="cluster-config"></div>
+              <small id="message-alert"></small>
+              {% if context.selected_cluster == None %}
+                <h3>Please select a kubernetes cluster</h3>
+              {% else %}
+              <h2>{{context.selected_cluster.name}}</h2>
+              {% if context.already_inited_msg %}
+             
+              <div class="alert alert-danger" role="alert">
+                {{context.already_inited_msg}}
+              </div>
+              {% else %}
+              <div class="alert alert-info" role="alert">
+                <h3>Prerequisite</h3>
+                Please ensure that you have already registered your github personal access token in the <a href="/configure">Configure Section</a>
+              </div>
+
+              <form  ic-post-to="/deploy_framework/{{context.submenu}}/{{context.selected_cluster.id}}" ic-indicator="#spinner" ic-target='#message-alert'>
+                <div class="form-group">
+                  <label for="ingress_url">App Name</label> 
+                  <input id="app_name" name="app_name" placeholder="myapp" type="text" aria-describedby="app_namelHelpBlock" class="form-control" required="required"> 
+                  <small id="app_nameHelpBlock" class="form-text text-muted">This will be your app name inside kubernetes</small>
+                </div>
+                <div class="form-group">
+                  <label for="ingress_url">Ingress URL</label> 
+                  <input id="ingress_url" name="ingress_url" placeholder="/*" type="text" aria-describedby="ingress_urlHelpBlock" class="form-control" required="required"> 
+                  <small id="ingress_urlHelpBlock" class="form-text text-muted">This is the URL at which this application</small>
+                </div>
+                <div class="form-group">
+                  <label for="no_of_replicas">Max. No. of Replicas</label> 
+                  <input id="no_of_replicas" name="no_of_replicas" placeholder="3" type="text" class="form-control" aria-describedby="no_of_replicasHelpBlock" required="required"> 
+                  <small id="no_of_replicasHelpBlock" class="form-text text-muted">No. of instances of your application for HA and LoadBalancing, Minimum 3</small>
+                </div>
+                <div class="form-group">
+                  <label>Enable Features</label> 
+                  <div>
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_features_logging" id="enable_features_0" type="checkbox" class="custom-control-input" aria-describedby="enable_featuresHelpBlock" checked="checked"> 
+                      <label for="enable_features_0" class="custom-control-label">Logging</label>
+                    </div>
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_features_network_monitoring" id="enable_features_1" type="checkbox" class="custom-control-input"  aria-describedby="enable_featuresHelpBlock" checked="checked"> 
+                      <label for="enable_features_1" class="custom-control-label">Network Monitoring</label>
+                    </div> 
+                    <small id="enable_featuresHelpBlock" class="form-text text-muted">Enable Features for the application</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="backup_schedule">Database Backup Schedule</label> 
+                  <div class="input-group">
+                    <input id="backup_schedule" name="backup_schedule" placeholder="60*24" type="text" aria-describedby="backup_scheduleHelpBlock" class="form-control" required="required"> 
+                    <div class="input-group-append">
+                      <div class="input-group-text">mins</div>
+                    </div>
+                  </div> 
+                  <small id="backup_scheduleHelpBlock" class="form-text text-muted">Backup schedule for Database</small>
+                </div>
+                <div class="form-group">
+                  <label for="docker_registry_name">Docker Registry Name</label> 
+                  <input id="docker_registry_name" name="docker_registry_name" placeholder="django-app-registry" type="text" class="form-control" aria-describedby="docker_registry_nameHelpBlock" required="required"> 
+                  <small id="docker_registry_nameHelpBlock" class="form-text text-muted">Name of AWS Elastic Container Registry, into which built docker containers will be registered</small>
+                </div>
+                <!-- <div class="form-group">
+                  <label for="github_api_token">Github API Token</label> 
+                  <input id="github_api_token" name="github_api_token" placeholder="Github API Token" type="text" class="form-control" aria-describedby="github_api_tokenHelpBlock" required="required"> 
+                  <small id="github_api_tokenHelpBlock" class="form-text text-muted"><a target="_blank" href="https://docs.github.com/en/enterprise/2.15/user/articles/creating-a-personal-access-token-for-the-command-line">Create your Github API token </a></small>
+                </div> -->
+                <div class="form-group">
+                  <label for="github_repo_name">Github Repo Name</label> 
+                  <input id="github_repo_name" name="github_repo_name" placeholder="django-app" type="text" class="form-control" aria-describedby="github_repo_nameHelpBlock" required="required"> 
+                  <small id="github_repo_nameHelpBlock" class="form-text text-muted">Name of your flask application in Github</small>
+                </div> 
+                <div class="form-group">
+                  <button name="submit" type="submit" class="btn btn-primary">Init the project</button>
+                </div>
+              </form>
+
+              {% endif %}
+
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

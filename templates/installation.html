@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Configure Essential Components(Optional)</h1> 
+     
+      <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+       <!-- <i id="quick-create-spinner" class="fa fa-spinner fa-spin" style="display:none"></i> -->
+        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-7">
+              <form method='GET' action='/menu/components/installation'>
+                <div class="form-group">
+                  <label for="eks_cluster">EKS Cluster</label> 
+                  <br>
+                  <!-- <label class="alert alert-warning" role="alert">**Only for Cluster Created using Full-Create option </label> -->
+                  <div>
+                    <select onchange="this.form.submit()" id="eks_cluster" name="eks_cluster" class="custom-select" aria-describedby="eks_clusterHelpBlock" required="required">
+                      <!-- <option value="1">ONE</option>
+                      <option value="2">TWO</option> -->
+                      <option></option>
+                      {% for cluster in context.clusters %}
+                        {% if cluster.status  %}
+                      <option value="{{cluster.id}}">{{cluster.name}}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select> 
+                    <span id="eks_clusterHelpBlock" class="form-text text-muted">Below are some mandatory components for fsKube to function</span>
+                  </div>
+                </div> 
+               
+              </form>
+            </div>
+            <div class="col-12">
+              <div id="cluster-config"></div>
+              <span id="message-alert"></span>
+              {% if context.selected_cluster == None %}
+                <h3>Please select a kubernetes cluster</h3>
+              {% else %}
+              <h2>{{context.selected_cluster.name}}</h2>
+              {% if context.already_inited_msg %}
+             
+              <div class="alert alert-danger" role="alert">
+                {{context.already_inited_msg}}
+              </div>
+              {% endif %}
+              <form ic-post-to="/configure_cluster/{{context.selected_cluster.id}}" ic-indicator="#spinner" ic-target='#message-alert'>
+               <div class="form-group row">
+                <div class="offset-6 col-6">
+                  <button name="submit" type="submit" class="btn btn-primary float-right">Install</button>
+                </div>
+                <div class="card border-primary mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Ingress
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-primary">
+                    <h5 class="card-title">AWS EKS ALB</h5>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIfMdOSIjNRbnrgDRO8IMSxOuAakUC8zXqSw&usqp=CAU" height="100" width="100" class=" rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Allows application access from internet.</p>
+                  </div>
+                </div>
+
+
+
+
+                <div class="card border-secondary mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Service Mesh
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-secondary">
+                    <h5 class="card-title">LinkerD</h5>
+                    <img src="data:image/png;base64,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" height="auto" class="rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Enables Network Security, Reliability and Observability</p>
+                  </div>
+                </div>
+
+      
+
+                <div class="card border-danger mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Enable Backup & Restore
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-danger">
+                    <h5 class="card-title">Velero</h5>
+                    <img src="data:image/png;base64,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" height="auto" class="rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Enables Data backup and restore</p>
+                  </div>
+                </div>
+                
+
+                <div class="card border-warning mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Monitoring & Logging
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-warning">
+                    <h5 class="card-title">ELK</h5>
+                    <img src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/114190066/original/d1ae46a27bd3de1dbafa0521c5943ae2ebd7ea66/setup-elk-stack-on-aws-or-google-cloud.png" height="auto" class="rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Enables Cluster Monitoring and Application logging</p>
+                  </div>
+                </div>
+
+
+                <div class="card border-info mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Metrics Monitoring
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-info">
+                    <h5 class="card-title">Metrics Server</h5>
+                    <img src="https://www.elastic.co/guide/en/beats/metricbeat/current/images/metricbeat-kubernetes-controllermanager.png" height="auto"  class="rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Enables Cluster Metrics and Horizontal Pod Scaling</p>
+                  </div>
+                </div>
+
+
+
+                <div class="card border-secondary mb-3" style="max-width: 18rem;margin:1em">
+                  <div class="card-header">Dashboard
+
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input  type="checkbox"  aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                        <label  class="custom-control-label"></label>
+                      </div> 
+
+                  </div>
+                  <div class="card-body text-secondary">
+                    <h5 class="card-title">Kubernetes Default Dashboard</h5>
+                    <img src="data:image/png;base64,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" height="auto" class="rounded mx-auto d-block img-fluid"/>
+                    <p class="card-text">Enable Default Kubernetes Dashboard</p>
+                  </div>
+                </div>
+
+                  <div class="offset-6 col-6">
+                    <button name="submit" type="submit" class="btn btn-primary float-right">Install</button>
+                  </div>
+
+               </div>
+              
+                <!-- <div class="form-group row">
+
+                  
+                  <label class="col-6">Enable Ingress</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_ingress" id="enable_ingress_0" type="checkbox" {% if context.selected_cluster.enable_ingress %}checked{%endif%} aria-describedby="enable_ingressHelpBlock" class="custom-control-input" checked disabled> 
+                      <label for="enable_ingress_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_ingressHelpBlock" class="form-text text-muted">Allows application access from internet</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-6">Enable Service Mesh</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_service_mesh" id="enable_service_mesh_0" type="checkbox"  {% if context.selected_cluster.enable_service_mesh %}checked{%endif%} aria-describedby="enable_service_meshHelpBlock" class="custom-control-input"  checked disabled> 
+                      <label for="enable_service_mesh_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_service_meshHelpBlock" class="form-text text-muted">Enables Network Security, Reliability and Observability</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-6">Enable Backup & Restore</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_backup_restore" id="enable_backup_restore_0" type="checkbox" aria-describedby="enable_backup_restoreHelpBlock" class="custom-control-input"   {% if context.selected_cluster.enable_backup_restore %}checked{%endif%}  checked disabled> 
+                      <label for="enable_backup_restore_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_backup_restoreHelpBlock" class="form-text text-muted">Enables Data backup and restore</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-6">Enable Monitoring & Logging</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_monitoring_logging" id="enable_monitoring_logging_0" type="checkbox" aria-describedby="enable_monitoring_loggingHelpBlock" class="custom-control-input"  {% if context.selected_cluster.enable_monitoring_logging %}checked{%endif%}  checked disabled> 
+                      <label for="enable_monitoring_logging_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_monitoring_loggingHelpBlock" class="form-text text-muted">Enables Cluster Monitoring and Application logging</small>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-6">Metrics Server</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_metrics_server" id="enable_metrics_server_0" type="checkbox" aria-describedby="enable_metrics_serverHelpBlock" class="custom-control-input"  {% if context.selected_cluster.enable_metrics_server %}checked{%endif%} checked disabled> 
+                      <label for="enable_metrics_server_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_metrics_serverHelpBlock" class="form-text text-muted">Enables Cluster Metrics and Horizontal Pod Scaling </small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-6">Enable Dashboard</label> 
+                  <div class="col-6">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                      <input name="enable_dashboard" id="enable_dashboard_0" type="checkbox" aria-describedby="enable_dashboardHelpBlock" class="custom-control-input"   {% if context.selected_cluster.enable_dashboard %}checked{%endif%}  checked disabled>  
+                      <label for="enable_dashboard_0" class="custom-control-label"></label>
+                    </div> 
+                    <small id="enable_dashboardHelpBlock" class="form-text text-muted">Enable Default Kubernetes Dashboard</small>
+                  </div>
+                </div> 
+                
+                <div class="form-group row">
+                  <div class="offset-6 col-6">
+                    <button name="submit" type="submit" class="btn btn-primary">Appy</button>
+                  </div>
+                </div>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

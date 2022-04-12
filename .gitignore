@@ -1,0 +1,10 @@
+.vscode
+venv
+build/
+binaries
+secrets
+downloads
+frameworks
+*.bat
+*.log
+*__pycache__*

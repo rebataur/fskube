@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">EKS Kubernentes DevOps Release Management</h1>  <i id="quick-create-spinner" class="fa fa-spinner fa-spin" style="display:none"></i>
+        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-7">
+              <form method='GET' action='/menu/devsecops/release'>
+                <div class="form-group">
+                  <label for="eks_cluster">EKS Cluster</label> 
+                  <div>
+                    <select onchange="this.form.submit()" id="eks_cluster" name="eks_cluster" class="custom-select" aria-describedby="eks_clusterHelpBlock" required="required">
+                      <!-- <option value="1">ONE</option>
+                      <option value="2">TWO</option> -->
+                      <option></option>
+                      {% for cluster in context.clusters %}
+                        {% if cluster.status  %}
+                      <option value="{{cluster.id}}">{{cluster.name}}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select> 
+                    <span id="eks_clusterHelpBlock" class="form-text text-muted">Select one of your existing EKS Cluster to apply changes</span>
+                  </div>
+                </div> 
+               
+              </form>
+            </div>
+            <div class="col-12">
+              <div id="cluster-config"></div>
+              <span id="message-alert"></span>
+              {% if context.selected_cluster == None %}
+                <h3>Please select a kubernetes cluster</h3>
+              {% else %}
+              <h2>{{context.selected_cluster.name}}</h2>
+              <div class="row">
+                <div class="col-lg-4">
+
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h3 class="m-0 font-weight-bold text-primary"><span class="badge badge-secondary">Development</span></h3>
+                    </div>
+                    <div class="card-body">
+                      <form method="POST" action='/devsecops/{{context.selected_cluster.id}}/development'>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="schedule_cicd" name="schedule_cicd">
+                          <label class="form-check-label" for="exampleCheck1">Enable CI/CD</label>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">CI/CD Time Cycle</label>
+                          <input type="number" class="form-control" id="schedule_cicd_interval" name="schedule_cicd_interval" aria-describedby="emailHelp" placeholder="Enter duration in minutes, minimum 5 minutes" min="1" value="5">
+                         
+                          <small id="emailHelp" class="form-text text-muted">After each duration CI/CD will be triggered for feature branch if there is a new push.</small>
+                        </div>
+                        <input type="hidden"  name="action" value="schedule_cicd"/>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                      </form>
+
+
+                    
+                    </div>
+                  </div>
+    
+            
+    
+                </div>
+              
+
+
+                <div class="col-lg-4">
+
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h3 class="m-0 font-weight-bold text-primary"><span class="badge badge-warning">Quality</span></h3>
+                    </div>
+                    <div class="card-body">
+
+
+                      <form method="POST" action='/devsecops/{{context.selected_cluster.id}}/quality'>
+                        
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Create Release</label>
+                          <small class="form-text text-muted">
+                            <a target="_" href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">
+                            Step 1. Get all your working code from your feature branch into master branch via pull request, and then create a release</small>
+                          </a>
+                           
+                          <small class="form-text text-muted">
+                            <a target="_" href="https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">
+                            Step 2. Create a new release and assign a tag ex. v1.2.3 ( v<Major><Minor><Patch> based on semantic versioning )</small>
+                          </a>             
+                        </div>
+                       
+                        <div class="form-group">
+                          <hr>
+                          <label for="exampleInputEmail1">Latest Release from master branch</label>
+                            
+                          <label for="exampleInputEmail1"><span class="badge badge-success"> {{context.release_tag_name}} - {{context.release_title}}</span></label>
+                          <select class="custom-select" name="action">
+                            <option></option>
+                            <option value="deploy_for_testing">Deploy for Testing</option>
+                            <option value="approve_for_production">Approve for Production</option>
+                          </select>
+                        </div>
+                        <input type="hidden" name="release_tag" value="{{context.release_tag_name}}"/>
+                        <input type="hidden" name="release_tag_title" value="{{context.release_tag_title}}"/>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </form>
+
+                      
+                      <!-- <form>
+                        
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Create Release of Type</label>
+                          <small class="form-text text-muted">
+                            <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">
+                            Get all your working code from your feature branch into master branch via pull request, and then create a release</small>
+                          </a>
+                           
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Name of Release</label>
+                            <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter duration in minutes, minimum 5 minutes">
+                           
+                            <small id="emailHelp" class="form-text text-muted">After each duration CI/CD will be triggered for feature branch if there is a new push.</small>
+                          </div>
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="release-type" id="major-release" value="major">
+                            <label class="form-check-label" for="major-release">
+                             
+                              <span class="badge badge-primary"> Major Release</span>
+                            </label>
+                            <small  class="form-text text-muted">Breaking changes and incompatible with previous releases</small>
+               
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="release-type" id="minor-release" value="minor">
+                            <label class="form-check-label" for="minor-release">
+                              <span class="badge badge-info"> Minor Release</span>
+                            </label>
+                            <small class="form-text text-muted">Major improvments(additive) but no breaking changes and completely compatible with previous releases</small>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="release-type" id="patch-release" value="patch">
+                            <label class="form-check-label" for="patch-release">
+                              <span class="badge badge-danger"> Patch Release</span>
+                            </label>
+                            <small class="form-text text-muted">Bug fixes, no improvments, no breaking changes, and completely compatible with previous release</small>
+                          </div>  
+                        
+                          <div class="form-check">
+                            <button type="submit" class="btn btn-outline-primary">Create</button>
+                          </div>                      
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Releases Waiting in QA(Not older than 1 month)</label>
+                        </div>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            v1.3.2 - Fix of customer login
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Pass</a>
+                            <a class="dropdown-item" href="#">Fail</a>
+                            <a class="dropdown-item" href="#">Hold</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Discard</a>
+                          </div>
+                        </div>
+                       
+                      </form> -->
+                    </div>
+                  </div>
+    
+            
+    
+                </div>
+
+
+                <div class="col-lg-4">
+
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h3 class="m-0 font-weight-bold text-primary"><span class="badge badge-success">Production</span></h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <form method="POST" action='/devsecops/{{context.selected_cluster.id}}/production'>                       
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Release to Production</label>
+                          <small class="form-text text-muted">
+                            <a href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">
+                            Only one release in queue at a time is allowed, once released, you can rollback to previous working release. You cannot re-release, only Close the release.</small>
+                          </a>
+                          <hr>
+                            <label for="exampleInputEmail1">Latest Release from Quality</label>
+                            
+                            <label for="exampleInputEmail1"><span class="badge badge-success">{{context.production_release_tag_name}}</span></label>
+                            <select name="action" class="custom-select">
+                              <option></option>
+                              <option value="deploy_into_production">Deploy Into Production</option>
+                              <option value="rollback_from_production">Rollback to previous working release</option>
+                            </select>
+                          </div>
+                          
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+    
+            
+    
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

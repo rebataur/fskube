@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Monitoring Workload on kubernetes Cluster</h1>  <i id="quick-create-spinner" class="fa fa-spinner fa-spin" style="display:none"></i>
+        
+    </div>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">      
+          <div class="row">
+            <div class="col-7">
+              <form method='GET' action='/menu/devsecops/operations'>
+                <div class="form-group">
+                  <label for="eks_cluster">EKS Cluster</label> 
+                  <div>
+                    <select onchange="this.form.submit()" id="eks_cluster" name="eks_cluster" class="custom-select" aria-describedby="eks_clusterHelpBlock" required="required">
+                      <!-- <option value="1">ONE</option>
+                      <option value="2">TWO</option> -->
+                      <option></option>
+                      {% for cluster in context.clusters %}
+                        {% if cluster.status  %}
+                      <option value="{{cluster.id}}">{{cluster.name}}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select> 
+                    <span id="eks_clusterHelpBlock" class="form-text text-muted">Select one of your existing EKS Cluster to apply changes</span>
+                  </div>
+                </div> 
+               
+              </form>
+
+              <div id="cluster-config"></div>
+              <span id="message-alert"></span>
+              {% if context.selected_cluster == None %}
+                <h3>Please select a kubernetes cluster</h3>
+              {% else %}
+              <h2>{{context.selected_cluster.name}}</h2>
+              <form method="POST" action="/cluster_operation/{{context.selected_cluster.id}}">
+
+                <div class="form-group">
+                  <label for="nodes_min">Min. No. Nodes</label> 
+                  <input id="nodes_min" name="nodes_min" placeholder="" type="text" class="form-control" aria-describedby="nodes_minHelpBlock" required="required" value="{{context.selected_cluster.nodes_min}}"> 
+                  <small id="nodes_minHelpBlock" class="form-text text-muted">Minimum number of nodes, ideally 3</small>
+                </div>
+               
+                <div class="form-group">
+                  <label for="nodes_max">Max. No. Nodes</label> 
+                  <input id="nodes_max" name="nodes_max" placeholder="" type="text" class="form-control" aria-describedby="nodes_maxHelpBlock" required="required" value="{{context.selected_cluster.nodes_max}}"> 
+                  <small id="nodes_maxHelpBlock" class="form-text text-muted">Maximum number of nodes</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="actual_nodes">Actual. No. Nodes</label> 
+                  <input id="actual_nodes" name="nodes" placeholder="" type="text" class="form-control" aria-describedby="actual_nodesHelpBlock" required="required" value="{{context.selected_cluster.nodes}}"> 
+                  <small id="actual_nodesHelpBlock" class="form-text text-muted">Actual number of running nodes</small>
+                </div>
+
+                <div class="form-group">
+                  <button name="submit" type="submit" class="btn btn-primary">Apply Changes</button>
+                </div>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+{% endblock %}

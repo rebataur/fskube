@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Kubernetes Cluster Full Create</h1>
+    <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <!-- <i id="spinner" class="fa fa-spinner fa-spin" style="display:none"></i> -->
+
+  </div>
+
+</nav>
+<!-- End of Topbar -->
+<div class="container-fluid">
+  <div class="row">
+    <style>
+      /* HIDE RADIO */
+      [type=radio] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* IMAGE STYLES */
+      [type=radio]+img {
+        cursor: pointer;
+        padding: 1em;
+      }
+
+      /* CHECKED STYLES */
+      [type=radio]:checked+img {
+        outline: 4px solid green;
+      }
+    </style>
+    
+
+    <div class="col-7">
+      <form method="GET" action="/menu/cluster/full_create">
+        <div class="form-group">
+          <label>
+            <input type="radio" name="test" value="small" checked>
+            <img src="https://pbs.twimg.com/profile_images/1217566226827759616/hM6lnfw8_400x400.jpg" height="100" style="img-fluid">
+            <small style="position: relative;left: -80px;top: 40px;z-index: 1;">Available</small>
+          </label>          
+          <!-- <label>
+            <input type="radio" name="test" value="big" disabled>
+            <img src="https://pbs.twimg.com/profile_images/1268207800313774080/KF9pXfXU_400x400.jpg"height="100" style="img-fluid">
+            <small style="position: relative;left: -92px;top: 33px;z-index: 1;">Coming Soon</small>
+          </label>
+          <label>
+            <input type="radio" name="test" value="big" disabled>
+            <img src="https://pbs.twimg.com/profile_images/1219725421962571779/_qstUQx__400x400.jpg" height="100" style="img-fluid">
+            <small style="position: relative;left: -92px;top: 33px;z-index: 1;">Coming Soon</small>
+          </label> -->
+         
+  
+        </div>
+          <div class="form-group">
+            <label for="cluster_region">Geographical Region</label>
+            <div>
+              <select onchange="this.form.submit()" id="cluster_region" name="cluster_region" class="custom-select"
+                aria-describedby="cluster_regionHelpBlock">
+                <option></option>
+                {% for region in context.regions %}
+                {% if region.region_short_name == context.selected_region %}
+                <option value="{{region.region_short_name}}" selected>{{region.region_long_name}} -
+                  <small>{{region.region_short_name}}</small></option>
+                {% else %}
+                <option value="{{region.region_short_name}}">{{region.region_long_name}} -
+                  <small>{{region.region_short_name}}</small></option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              <small id="cluster_regionHelpBlock" class="form-text text-muted">Select One Geo Region where cluster will
+                be hosted</small>
+            </div>
+          </div>
+
+
+      </form>
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <span id="message-alert"></span>
+      <form ic-post-to="/full_create" ic-indicator="#spinner" ic-target='#message-alert'>
+
+
+        <div class="form-group">
+          <label>Availability Zones</label>
+          <div>
+            {% for zone in context.available_zones %}
+            <div class="custom-control custom-checkbox custom-control-inline">
+              <input name="cluster_availability_zones" id="cluster_availability_zones_{{zone}}" type="checkbox"
+                class="custom-control-input" value="{{zone}}" aria-describedby="cluster_availability _zonesHelpBlock"
+                checked>
+              <label for="cluster_availability_zones_{{zone}}" class="custom-control-label">{{zone}}</label>
+            </div>
+            {% endfor %}
+
+            <small id="cluster_availability _zonesHelpBlock" class="form-text text-muted">Pre-filtered zones based on
+              availability within the region for m5.large instances</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Managed Node Group</label>
+          <div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input name="cluster_managed_nodegroup" id="cluster_managed_nodegroup_0" type="radio"
+                class="custom-control-input" value="true" aria-describedby="cluster_managed_nodegroupHelpBlock" checked>
+              <label for="cluster_managed_nodegroup_0" class="custom-control-label">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input name="cluster_managed_nodegroup" id="cluster_managed_nodegroup_1" type="radio"
+                class="custom-control-input" value="false" aria-describedby="cluster_managed_nodegroupHelpBlock">
+              <label for="cluster_managed_nodegroup_1" class="custom-control-label">No</label>
+            </div>
+
+            <small id="cluster_managed_nodegroupHelpBlock" class="form-text text-muted">AWS Managed Auto Scaling Nodes
+              for your cluster</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cluster_name">Unique Name of the Cluster</label>
+          <input id="cluster_name" name="cluster_name" required="required" placeholder="eg. PRD, STG, DEV" type="text"
+            class="form-control">
+        </div>
+        <!-- <div class="form-group">
+                      <label for="cluster_node_group_name">Node Group Name</label> 
+                      <input id="cluster_node_group_name" name="cluster_node_group_name" placeholder="PRD-NODE-GRP" type="text" class="form-control" aria-describedby="cluster_node_group_nameHelpBlock"> 
+                      <small id="cluster_node_group_nameHelpBlock" class="form-text text-muted">Name of AWS Managed Auto Scaling Node Group</small>
+                    </div>  -->
+        <input type="hidden" value="{{context.selected_region}}" name="cluster_region" />
+        <div class="form-group">
+          <button name="submit" type="submit" class="btn btn-primary  float-right">Create</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Monitoring Workload on kubernetes Cluster</h1> 
+    <div id="spinner" style="display:none" class="spinner-grow text-success" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+     <!-- <i id="spinner" class="fa fa-spinner fa-spin" style="display:none"></i> -->
+
+  </div>
+
+</nav>
+<!-- End of Topbar -->
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-7">
+      <form method='GET' action='/menu/devsecops/monitoring'>
+        <div class="form-group">
+          <label for="eks_cluster">EKS Cluster</label>
+          <div>
+            <select onchange="this.form.submit()" id="eks_cluster" name="eks_cluster" class="custom-select"
+              aria-describedby="eks_clusterHelpBlock" required="required">
+              <!-- <option value="1">ONE</option>
+                      <option value="2">TWO</option> -->
+              <option></option>
+              {% for cluster in context.clusters %}
+              {% if cluster.status  %}
+              <option value="{{cluster.id}}">{{cluster.name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+            <span id="eks_clusterHelpBlock" class="form-text text-muted">Select one of your existing EKS Cluster to
+              apply changes</span>
+          </div>
+        </div>
+
+      </form>
+
+      <div id="cluster-config"></div>
+      <span id="message-alert"></span>
+
+    </div>
+  </div>
+
+  {% if context.selected_cluster == None %}
+  <h3>Please select a kubernetes cluster</h3>
+  {% else %}
+  <h2>{{context.selected_cluster.name}}</h2>
+
+  <!-- Node information -->
+  <h2>Nodes</h2>
+
+  
+  <div class="row">
+
+    {% for node in context.node_metrics['items'] %}
+   <div class="col-xl-3 col-md-6 mb-4">
+     <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{node.metadata.name}}</div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">CPU</div>
+              </div>
+              <div class="col">
+                <div class="progress progress-sm mr-2">
+                  <div class="progress-bar bg-info" role="progressbar"
+                    style="width: {{node['usage']['cpu_usage_pct']}}%" aria-valuenow="50" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Mem</div>
+              </div>
+              <div class="col">
+                <div class="progress progress-sm mr-2">
+                  <div class="progress-bar bg-info" role="progressbar"
+                    style="width: {{node['usage']['mem_usage_pct']}}%" aria-valuenow="50" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+              </div>
+
+            </div>
+
+            {% for condition in node['usage']['conditions'] %}
+            {% if condition.type %}
+            <span class="badge badge-success">{{condition.type}}</span>
+            {% else %}
+            <span class="badge badge-danger">{{condition.type}}</span>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+     </div>
+   </div>
+   {% endfor %}
+
+ </div>
+
+
+  <!-- End of Node information -->
+
+  <!-- Namespace information -->
+  <h2>Namespaces</h2>
+
+  <ul class="nav nav-pills">
+    {% for ns in context.namespaces['items'] %}
+    <li class="nav-item">
+      <a class="nav-link  {% if request.args.namespace == ns.metadata.name %} active {%else%} {%endif%}" id={{ns.metadata.name}}   
+      href="?eks_cluster={{context.selected_cluster.id}}&namespace={{ns.metadata.name}}">{{ns.metadata.name}}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
+
+
+  <div class="row">
+
+     <!-- POD Information -->
+  {% if request.args.namespace %}
+    {% for pod in context.pod_metrics['items'] %}
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{pod.metadata.name}}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">CPU:  {{pod.containers.0.usage.cpu}} <br>MEM: {{pod.containers.0.usage.memory}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+
+          
+          {% for condition in pod['conditions'] %}
+          {% if condition.type %}
+          <span class="badge badge-success">{{condition.type}}</span>
+          {% else %}
+          <span class="badge badge-danger">{{condition.type}}</span>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+  {% endif %}
+
+
+  <!-- END POD Information -->
+
+  <!-- End of Namespace information -->
+  {% endif %}
+
+  <!-- /.container-fluid -->
+
+  {% endblock %}
