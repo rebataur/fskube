@@ -11,7 +11,7 @@
   <h3 align="center">djkube - Your full-stack Kubernetes enabler</h3>
 
   <p align="center">
- If you are a Java, Python, Ruby or NodeJS developer, djkube provides you with best user experience in easily running your full-stack apps on Kubernetes in AWS with just a few clicks.
+ If you are a Python Django developer then djkube provides you with best user experience in easily running your full-stack Django apps on Kubernetes in AWS with just a few clicks.
     <br />
     <!-- <a href="https://github.com/rebataur/djkube"><strong>Explore the docs »</strong></a> -->
     <br />
