@@ -72,6 +72,7 @@ https://rebataur.com/tools/djkube#djkube
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
+* Currently tested only on Windows
 * Python 3.7+
 * AWS CLI
 
