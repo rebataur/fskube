@@ -1,6 +1,7 @@
 .vscode
 venv
 build/
+dist
 downloads
 frameworks
 secrets
