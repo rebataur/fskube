@@ -98,11 +98,7 @@ pip install -r requirements.txt
 >set FLASK_RUN_PORT=5678
 >flask run
 ```
-5. Download following dependencies
-```sh
->mkdir binaries\cli
-```
-Copy velero.exe, linkerd.exe, helm.exe, kubectl.exe into this folder
+
 
 6. Launch http://localhost:5678 in your browser
 
