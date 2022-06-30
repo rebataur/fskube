@@ -67,7 +67,7 @@
 * Linux and Mac ports coming soon.
 
 ### For Convenience Download single executable for Windows
-https://rebataur.com/tools/djkube#djkube
+https://github.com/rebataur/djkube/releases/download/v0.1.8/djkube.exe
 
 ### Prerequisites
 
