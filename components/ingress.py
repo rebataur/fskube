@@ -1,7 +1,7 @@
-from fskube import commander
-from fskube import model
+from djkube import commander
+from djkube import model
 import requests
-from fskube import commander
+from djkube import commander
 import os
 import json
 import logging

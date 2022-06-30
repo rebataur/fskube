@@ -1,10 +1,8 @@
 .vscode
 venv
 build/
-binaries
-secrets
 downloads
 frameworks
+secrets
 *.bat
-*.log
 *__pycache__*

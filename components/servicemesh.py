@@ -1,5 +1,5 @@
-from fskube import commander
-from fskube import model
+from djkube import commander
+from djkube import model
 import logging
 logging.basicConfig(level=logging.INFO)
 class ServiceMesh:

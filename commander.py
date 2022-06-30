@@ -20,7 +20,7 @@ def resource_path(relative_path):
 
 def user_home_path():
     home = str(Path.home())
-    path = os.path.join(home, '.fskube')
+    path = os.path.join(home, '.djkube')
     try:
         os.makedirs(path)
     except OSError as e:

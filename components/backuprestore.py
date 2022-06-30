@@ -1,5 +1,5 @@
-from fskube import commander
-from fskube import model
+from djkube import commander
+from djkube import model
 import requests
 import json
 import os

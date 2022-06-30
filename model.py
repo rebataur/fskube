@@ -6,7 +6,7 @@ import os
 import commander
 
 user_home_path = commander.user_home_path()
-db_file_path = os.path.join(user_home_path,'fskube')
+db_file_path = os.path.join(user_home_path,'djkube')
 db = Database()
 
 db.bind(provider='sqlite', filename=db_file_path, create_db=True)
@@ -138,7 +138,7 @@ def update_cluster_status(cluster_id, status):
     cluster = Cluster.get(id=cluster_id)
     cluster.status = status
     if status == 'Error Deleted':
-        cluster.name = status + '-' + cluster_id 
+        cluster.name = status + '-' + str(cluster_id) 
 
 
 @db_session
