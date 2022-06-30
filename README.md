@@ -8,7 +8,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">djkube - Django Developer's full-stack Kubernetes enabler</h3>
+  <h3 align="center">djkube (previously fsKube) - Django Developer's full-stack Kubernetes enabler</h3>
 
   <p align="center">
  If you are a Python Django developer then djkube provides you with best user experience in easily running your full-stack Django apps on Kubernetes in AWS with just a few clicks.
