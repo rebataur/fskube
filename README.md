@@ -4,23 +4,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/rebataur/djkube">
+  <a href="https://github.com/rebataur/fskube">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">djkube (previously fsKube) - Django Developer's full-stack Kubernetes enabler</h3>
+  <h3 align="center">fskube (previously fsKube) - Django Developer's full-stack Kubernetes enabler</h3>
 
   <p align="center">
- If you are a Python Django developer then djkube provides you with best user experience in easily running your full-stack Django apps on Kubernetes in AWS with just a few clicks.
+ If you are a Python Django developer then fskube provides you with best user experience in easily running your full-stack Django apps on Kubernetes in AWS with just a few clicks.
     <br />
-    <!-- <a href="https://github.com/rebataur/djkube"><strong>Explore the docs »</strong></a> -->
+    <!-- <a href="https://github.com/rebataur/fskube"><strong>Explore the docs »</strong></a> -->
     <br />
     <br />
     <a href="https://www.youtube.com/watch?v=Nt5yowdwm5Q">View Demo</a>
     ·
-    <a href="https://github.com/rebataur/djkube/issues">djkube Bug</a>
+    <a href="https://github.com/rebataur/fskube/issues">fskube Bug</a>
     ·
-    <a href="https://github.com/rebataur/djkube/issues">Request Feature</a>
+    <a href="https://github.com/rebataur/fskube/issues">Request Feature</a>
   </p>
 </p>
 
@@ -67,7 +67,7 @@
 * Linux and Mac ports coming soon.
 
 ### For Convenience Download single executable for Windows
-https://github.com/rebataur/djkube/releases/download/v0.1.8/djkube.exe
+https://github.com/rebataur/fskube/releases/download/v0.1.8/fskube.exe
 
 ### Prerequisites
 
@@ -77,23 +77,23 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
  
-1. Clone the djkube
+1. Clone the fskube
 ```sh
-git clone https://github.com/rebataur/djkube.git
+git clone https://github.com/rebataur/fskube.git
 ```
 2. Create virtualenv
 ```sh
-cd djkube
+cd fskube
 virtualenv venv
 venv\scripts\activate
 ```
-3. Install djkube
+3. Install fskube
 ```sh
 pip install -r requirements.txt
 ```
 4. Run the flask app
 ```sh
->set FLASK_APP=djkube.py
+>set FLASK_APP=fskube.py
 >set FLASK_DEBUG=FALSE 
 >set FLASK_RUN_PORT=5678
 >flask run
@@ -104,12 +104,12 @@ pip install -r requirements.txt
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-KubeConfig file is stored in your YOUR_USER_DIRECTORY/.djkube/YOUR_CLUSTER_ID
+KubeConfig file is stored in your YOUR_USER_DIRECTORY/.fskube/YOUR_CLUSTER_ID
 
 
-Please watch a detailed video of djkube below.
+Please watch a detailed video of fskube below.
 
-[![Demo Video of djkube](http://img.youtube.com/vi/Nt5yowdwm5Q/0.jpg)](http://www.youtube.com/watch?v=Nt5yowdwm5Q "Demo Video of djkube")
+[![Demo Video of fskube](http://img.youtube.com/vi/Nt5yowdwm5Q/0.jpg)](http://www.youtube.com/watch?v=Nt5yowdwm5Q "Demo Video of fskube")
 
 
 
@@ -121,7 +121,7 @@ Please watch a detailed video of djkube below.
 3. Graviton based Instances
 4. AutoScaling Group
 
-See the [open issues](https://github.com/rebataur/djkube/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/rebataur/fskube/issues) for a list of proposed features (and known issues).
 
 
 
@@ -150,7 +150,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Your Name - [@rebataur](https://twitter.com/rebataur) - hello@rebataur.com
 
-Project Link: [https://github.com/rebataur/djkube](https://github.com/rebataur/djkube)
+Project Link: [https://github.com/rebataur/fskube](https://github.com/rebataur/fskube)
 
 
 
@@ -176,15 +176,15 @@ This project would not have been possible without the following projects.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
-[contributors-url]: https://github.com/rebataur/djkube/graphs/contributors
+[contributors-url]: https://github.com/rebataur/fskube/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
-[forks-url]: https://github.com/rebataur/djkube/network/members
+[forks-url]: https://github.com/rebataur/fskube/network/members
 [stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
-[stars-url]: https://github.com/rebataur/djkube/stargazers
+[stars-url]: https://github.com/rebataur/fskube/stargazers
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
-[issues-url]: https://github.com/rebataur/djkube/issues
+[issues-url]: https://github.com/rebataur/fskube/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/rebataur/djkube/blob/master/LICENSE.txt
+[license-url]: https://github.com/rebataur/fskube/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/rebataur.com/
 [product-screenshot]: images/screenshot.png
