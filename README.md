@@ -8,10 +8,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">fskube (previously fsKube) - Django Developer's full-stack Kubernetes enabler</h3>
+  <h3 align="center">fskube - Python Developer's full-stack Kubernetes enabler</h3>
 
   <p align="center">
- If you are a Python Django developer then fskube provides you with best user experience in easily running your full-stack Django apps on Kubernetes in AWS with just a few clicks.
+ If you are a Python Python developer then fskube provides you with best user experience in easily running your full-stack Python apps on Kubernetes in AWS with just a few clicks.
     <br />
     <!-- <a href="https://github.com/rebataur/fskube"><strong>Explore the docs »</strong></a> -->
     <br />
