@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/rebataur/fskube">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+<!--     <img src="images/logo.png" alt="Logo" width="80" height="80"> -->
   </a>
 
   <h3 align="center">fskube - Python Developer's full-stack Kubernetes enabler</h3>
